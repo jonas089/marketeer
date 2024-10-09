@@ -5,10 +5,10 @@ use std::time::Duration;
 
 use api::nonkyc::NonKycClient;
 use ntfy::NftyClient;
+use std::env;
 use types::nonkyc::{MarketData, MarketWrapper, TickerData};
-
 // Luckycoin loop
-async fn nonkyc(pairs: &[&str]) {
+async fn nonkyc(pairs: &[&str], sleep_duration: u64) {
     loop {
         let nonkyc_client = NonKycClient;
         let ntfy_client = NftyClient {
@@ -36,12 +36,16 @@ async fn nonkyc(pairs: &[&str]) {
                 Err(_) => {}
             };
         }
-        tokio::time::sleep(Duration::from_secs(600)).await;
+        tokio::time::sleep(Duration::from_secs(sleep_duration)).await;
     }
 }
 
 #[tokio::main]
 async fn main() {
     let pairs = ["LKY_USDT", "BEL_USDT", "TDC_USDT"];
-    nonkyc(&pairs).await;
+    let sleep_duration: u64 = env::var("SLEEP_DURATION")
+        .unwrap_or("300".to_string())
+        .parse()
+        .unwrap();
+    nonkyc(&pairs, sleep_duration).await;
 }
