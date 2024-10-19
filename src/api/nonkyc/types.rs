@@ -139,9 +139,19 @@ impl TickerData {
 pub struct Balances {
     pub balances: Vec<Balance>,
 }
-impl Balances {}
+impl Balances {
+    pub fn get_non_zero(&self) -> Balances {
+        let mut result: Vec<Balance> = vec![];
+        for balance in &self.balances {
+            if balance.total_balance() > 0f64 {
+                result.push(balance.clone());
+            }
+        }
+        Balances { balances: result }
+    }
+}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Balance {
     pub asset: String,
     pub name: String,

@@ -64,5 +64,7 @@ mod test {
             balances: serde_json::from_str(&response).unwrap(),
         };
         println!("Balances: {:?}", &balances);
+
+        println!("Non-zero Balances: {:?}", &balances.get_non_zero());
     }
 }
