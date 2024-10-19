@@ -511,6 +511,7 @@ checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
 [[package]]
 name = "marketeer"
 version = "0.1.0"
+source = "git+https://github.com/jonas089/marketeer#bc207ede2fd9942b289b4708b07e25019f9bf805"
 dependencies = [
  "hex",
  "hmac",
