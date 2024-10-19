@@ -1,6 +1,5 @@
 use crate::api::constants::{BASE, MARKET_BY_SYMBOL, TICKER_BY_SYMBOL};
 pub mod auth;
-pub mod secret;
 pub mod types;
 use reqwest::{get, Error};
 use types::{MarketData, MarketWrapper, TickerData};
