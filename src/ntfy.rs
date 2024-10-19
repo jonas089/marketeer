@@ -1,9 +1,7 @@
 // sends push notifications to unique streams
-use crate::api::nonkyc::NonKycClient;
 use reqwest::{Error, Response};
-
-const BASE: &'static str = "https://ntfy.sh/";
-const UNIQUE_PREFIX: &'static str = "1ef23c2aab8f995a7eedaae4355cd02ce86e348f39daedaa12_";
+pub mod constants;
+use constants::{BASE, UNIQUE_PREFIX};
 // in the event of "stream pollution" this must be changed
 // to listen to the stream simply subscribe to it with either of the
 // supported prefixes

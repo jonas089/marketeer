@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug)]
 pub enum MarketWrapper {
     MarketData(MarketData),
     TickerData(TickerData),
@@ -7,60 +8,107 @@ pub enum MarketWrapper {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MarketData {
-    pub _id: String,
-    pub symbol: String,
-    pub primaryName: String,
-    pub primaryTicker: String,
-    pub lastPrice: String,
-    pub yesterdayPrice: String,
-    pub highPrice: String,
-    pub lowPrice: String,
-    pub volume: String,
-    pub lastTradeAt: i64,
-    pub priceDecimals: u32,
-    pub quantityDecimals: u32,
-    pub isActive: bool,
-    pub primaryAsset: String,
-    pub secondaryAsset: String,
-    pub imageUUID: String,
-    pub engineId: u32,
-    pub isPaused: bool,
-    pub bestAsk: String,
-    pub bestBid: String,
-    pub createdAt: i64,
-    pub updatedAt: i64,
-    pub primaryUsdValue: String,
-    pub primaryCirculation: String,
-    pub secondaryUsdValue: String,
-    pub secondaryCirculation: String,
-    pub lastPriceUpDown: String,
-    pub spreadPercent: String,
-    pub changePercent: String,
-    pub volumeSecondary: String,
-    pub lastPriceNumber: f64,
-    pub bestBidNumber: f64,
-    pub bestAskNumber: f64,
-    pub yesterdayPriceNumber: f64,
-    pub changePercentNumber: f64,
-    pub highPriceNumber: f64,
-    pub lowPriceNumber: f64,
-    pub volumeNumber: f64,
-    pub volumeSecondaryNumber: f64,
-    pub volumeUsdNumber: f64,
-    pub marketcapNumber: f64,
-    pub lineChart: String,
-    pub minimumQuantity: u32,
-    pub maxAllowedPrice: String,
-    pub minAllowedPrice: String,
-    pub pauseBuys: bool,
-    pub pauseSells: bool,
-    pub assignedWebsites: String,
-    pub spreadPercentNumber: f64,
+    #[serde(rename = "_id")]
     pub id: String,
+    pub symbol: String,
+    #[serde(rename = "primaryName")]
+    pub primary_name: String,
+    #[serde(rename = "primaryTicker")]
+    pub primary_ticker: String,
+    #[serde(rename = "lastPrice")]
+    pub last_price: String,
+    #[serde(rename = "yesterdayPrice")]
+    pub yesterday_price: String,
+    #[serde(rename = "highPrice")]
+    pub high_price: String,
+    #[serde(rename = "lowPrice")]
+    pub low_price: String,
+    #[serde(rename = "volume")]
+    pub volume: String,
+    #[serde(rename = "lastTradeAt")]
+    pub last_trade_at: i64,
+    #[serde(rename = "priceDecimals")]
+    pub price_decimals: u32,
+    #[serde(rename = "quantityDecimals")]
+    pub quantity_decimals: u32,
+    #[serde(rename = "isActive")]
+    pub is_active: bool,
+    #[serde(rename = "primaryAsset")]
+    pub primary_asset: String,
+    #[serde(rename = "secondaryAsset")]
+    pub secondary_asset: String,
+    #[serde(rename = "imageUUID")]
+    pub image_uuid: String,
+    #[serde(rename = "engineId")]
+    pub engine_id: u32,
+    #[serde(rename = "isPaused")]
+    pub is_paused: bool,
+    #[serde(rename = "bestAsk")]
+    pub best_ask: String,
+    #[serde(rename = "bestBid")]
+    pub best_bid: String,
+    #[serde(rename = "createdAt")]
+    pub created_at: i64,
+    #[serde(rename = "updatedAt")]
+    pub updated_at: i64,
+    #[serde(rename = "primaryUsdValue")]
+    pub primary_usd_value: String,
+    #[serde(rename = "primaryCirculation")]
+    pub primary_circulation: String,
+    #[serde(rename = "secondaryUsdValue")]
+    pub secondary_usd_value: String,
+    #[serde(rename = "secondaryCirculation")]
+    pub secondary_circulation: String,
+    #[serde(rename = "lastPriceUpDown")]
+    pub last_price_up_down: String,
+    #[serde(rename = "spreadPercent")]
+    pub spread_percent: String,
+    #[serde(rename = "changePercent")]
+    pub change_percent: String,
+    #[serde(rename = "volumeSecondary")]
+    pub volume_secondary: String,
+    #[serde(rename = "lastPriceNumber")]
+    pub last_price_number: f64,
+    #[serde(rename = "bestBidNumber")]
+    pub best_bid_number: f64,
+    #[serde(rename = "bestAskNumber")]
+    pub best_ask_number: f64,
+    #[serde(rename = "yesterdayPriceNumber")]
+    pub yesterday_price_number: f64,
+    #[serde(rename = "changePercentNumber")]
+    pub change_percent_number: f64,
+    #[serde(rename = "highPriceNumber")]
+    pub high_price_number: f64,
+    #[serde(rename = "lowPriceNumber")]
+    pub low_price_number: f64,
+    #[serde(rename = "volumeNumber")]
+    pub volume_number: f64,
+    #[serde(rename = "volumeSecondaryNumber")]
+    pub volume_secondary_number: f64,
+    #[serde(rename = "volumeUsdNumber")]
+    pub volume_usd_number: f64,
+    #[serde(rename = "marketcapNumber")]
+    pub market_cap_number: f64,
+    #[serde(rename = "lineChart")]
+    pub line_chart: String,
+    #[serde(rename = "minimumQuantity")]
+    pub minimum_quantity: u32,
+    #[serde(rename = "maxAllowedPrice")]
+    pub max_allowed_price: String,
+    #[serde(rename = "minAllowedPrice")]
+    pub min_allowed_price: String,
+    #[serde(rename = "pauseBuys")]
+    pub pause_buys: bool,
+    #[serde(rename = "pauseSells")]
+    pub pause_sells: bool,
+    #[serde(rename = "assignedWebsites")]
+    pub assigned_websites: String,
+    #[serde(rename = "spreadPercentNumber")]
+    pub spread_percent_number: f64,
 }
 impl MarketData {
     pub fn simple_price(&self) -> &str {
-        &self.lastPrice
+        &self.last_price
     }
 }
 
