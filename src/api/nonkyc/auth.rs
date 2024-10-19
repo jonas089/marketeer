@@ -27,7 +27,6 @@ pub fn authentication(payload: &str) -> AuthData {
     mac.update(message.as_bytes());
     let result = mac.finalize();
     let signature_hex = result.into_bytes().encode_hex();
-    println!("{:?}", signature_hex);
     AuthData {
         signature: signature_hex,
         api_key: public_key.to_string(),

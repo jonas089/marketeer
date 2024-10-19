@@ -47,7 +47,7 @@ impl NonKycClient {
                     }
                 }
             }
-            Err(_e) => return None,
+            Err(_) => return None,
         };
     }
 }
