@@ -1,7 +1,7 @@
 use crate::api::constants::{BASE, MARKET_BY_SYMBOL, TICKER_BY_SYMBOL};
 pub mod auth;
 pub mod types;
-use reqwest::{get, Error};
+use reqwest::get;
 use types::{MarketData, MarketWrapper, TickerData};
 pub enum MarketDataType {
     MarketBySybmol,
@@ -15,7 +15,7 @@ impl NonKycClient {
         &self,
         data_type: MarketDataType,
         symbol: &str,
-    ) -> Result<MarketWrapper, Error> {
+    ) -> Option<MarketWrapper> {
         let url = match data_type {
             MarketDataType::TickerBySymbol => {
                 format!("{}{}{}", BASE, TICKER_BY_SYMBOL, symbol)
@@ -30,20 +30,24 @@ impl NonKycClient {
                 let response_json = response.text().await.unwrap();
                 match data_type {
                     MarketDataType::TickerBySymbol => {
-                        let ticker_object: TickerData =
-                            serde_json::from_str(&response_json).unwrap();
-                        return Ok(MarketWrapper::TickerData(ticker_object));
+                        let ticker_object: Option<TickerData> =
+                            serde_json::from_str(&response_json).unwrap_or(None);
+                        match ticker_object {
+                            Some(ticker) => return Some(MarketWrapper::TickerData(ticker)),
+                            None => return None,
+                        }
                     }
                     MarketDataType::MarketBySybmol => {
-                        let market_object: MarketData =
-                            serde_json::from_str(&response_json).unwrap();
-                        return Ok(MarketWrapper::MarketData(market_object));
+                        let market_object: Option<MarketData> =
+                            serde_json::from_str(&response_json).unwrap_or(None);
+                        match market_object {
+                            Some(market) => return Some(MarketWrapper::MarketData(market)),
+                            None => return None,
+                        }
                     }
                 }
             }
-            Err(e) => {
-                return Err(e);
-            }
+            Err(_e) => return None,
         };
     }
 }

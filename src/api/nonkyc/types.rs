@@ -8,7 +8,7 @@ pub enum MarketWrapper {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MarketData {
-    #[serde(rename = "_id")]
+    #[serde(rename = "id")]
     pub id: String,
     pub symbol: String,
     #[serde(rename = "primaryName")]
