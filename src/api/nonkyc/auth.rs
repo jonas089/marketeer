@@ -38,6 +38,7 @@ pub fn authentication(payload: &str) -> AuthData {
 #[cfg(test)]
 mod test {
     use super::authentication;
+    use crate::api::nonkyc::types::Balances;
     use reqwest::Client;
     #[tokio::test]
     async fn test_api_auth() {
@@ -49,7 +50,19 @@ mod test {
         headers.insert("X-API-SIGN", auth.signature.parse().unwrap());
         headers.insert("Content-Type", "application/json".parse().unwrap());
         let client = Client::new();
-        let response = client.get(url).headers(headers).send().await;
-        println!("Balances: {:?}", &response.unwrap().text().await.unwrap());
+        let response = client
+            .get(url)
+            .headers(headers)
+            .send()
+            .await
+            .unwrap()
+            .text()
+            .await
+            .unwrap();
+        println!("Response: {:?}", &response);
+        let balances: Balances = Balances {
+            balances: serde_json::from_str(&response).unwrap(),
+        };
+        println!("Balances: {:?}", &balances);
     }
 }

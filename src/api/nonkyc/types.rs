@@ -137,16 +137,24 @@ impl TickerData {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Balances {
+    pub balances: Vec<Balance>,
+}
+impl Balances {}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Balance {
     pub asset: String,
     pub name: String,
-    pub available: f64,
-    pub pending: f64,
-    pub held: f64,
+    pub available: String,
+    pub pending: String,
+    pub held: String,
     pub assetid: String,
 }
 
-impl Balances {
+impl Balance {
     pub fn total_balance(&self) -> f64 {
-        self.available + self.pending + self.held
+        self.available.parse::<f64>().unwrap()
+            + self.pending.parse::<f64>().unwrap()
+            + self.held.parse::<f64>().unwrap()
     }
 }
