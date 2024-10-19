@@ -1,7 +1,10 @@
 use crate::api::constants::{BASE, MARKET_BY_SYMBOL, TICKER_BY_SYMBOL};
-use crate::types::nonkyc::{MarketData, MarketWrapper, TickerData};
+pub mod auth;
+pub mod secret;
+pub mod types;
 use reqwest::{get, Error};
-pub enum BySymbolEnum {
+use types::{MarketData, MarketWrapper, TickerData};
+pub enum MarketDataType {
     MarketBySybmol,
     TickerBySymbol,
 }
@@ -9,16 +12,16 @@ pub enum BySymbolEnum {
 pub struct NonKycClient;
 
 impl NonKycClient {
-    pub async fn get_by_symbol(
+    pub async fn get_token_pair(
         &self,
-        kind: BySymbolEnum,
+        data_type: MarketDataType,
         symbol: &str,
     ) -> Result<MarketWrapper, Error> {
-        let url = match kind {
-            BySymbolEnum::TickerBySymbol => {
+        let url = match data_type {
+            MarketDataType::TickerBySymbol => {
                 format!("{}{}{}", BASE, TICKER_BY_SYMBOL, symbol)
             }
-            BySymbolEnum::MarketBySybmol => {
+            MarketDataType::MarketBySybmol => {
                 format!("{}{}{}", BASE, MARKET_BY_SYMBOL, symbol)
             }
         };
@@ -26,13 +29,13 @@ impl NonKycClient {
         match response {
             Ok(response) => {
                 let response_json = response.text().await.unwrap();
-                match kind {
-                    BySymbolEnum::TickerBySymbol => {
+                match data_type {
+                    MarketDataType::TickerBySymbol => {
                         let ticker_object: TickerData =
                             serde_json::from_str(&response_json).unwrap();
                         return Ok(MarketWrapper::TickerData(ticker_object));
                     }
-                    BySymbolEnum::MarketBySybmol => {
+                    MarketDataType::MarketBySybmol => {
                         let market_object: MarketData =
                             serde_json::from_str(&response_json).unwrap();
                         return Ok(MarketWrapper::MarketData(market_object));
@@ -48,16 +51,16 @@ impl NonKycClient {
 
 #[cfg(test)]
 mod tests {
-    use super::{BySymbolEnum, NonKycClient};
+    use super::{MarketDataType, NonKycClient};
     #[tokio::test]
     async fn test_get_by_symbol() {
         let symbol = "BTC_USDT";
         let client: NonKycClient = NonKycClient;
         let maybe_ticker_data = client
-            .get_by_symbol(BySymbolEnum::TickerBySymbol, symbol)
+            .get_token_pair(MarketDataType::TickerBySymbol, symbol)
             .await;
         let maybe_market_data = client
-            .get_by_symbol(BySymbolEnum::MarketBySybmol, symbol)
+            .get_token_pair(MarketDataType::MarketBySybmol, symbol)
             .await;
 
         let ticker_data = maybe_ticker_data.unwrap();

@@ -134,3 +134,19 @@ impl TickerData {
         &self.last_price
     }
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Balances {
+    pub asset: String,
+    pub name: String,
+    pub available: f64,
+    pub pending: f64,
+    pub held: f64,
+    pub assetid: String,
+}
+
+impl Balances {
+    pub fn total_balance(&self) -> f64 {
+        self.available + self.pending + self.held
+    }
+}
