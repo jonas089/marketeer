@@ -1,8 +1,10 @@
-use crate::api::constants::{BASE, MARKET_BY_SYMBOL, TICKER_BY_SYMBOL};
 pub mod auth;
+pub mod constants;
 pub mod types;
+use constants::{BASE, MARKET_BY_SYMBOL, TICKER_BY_SYMBOL};
 use reqwest::get;
 use types::{MarketData, MarketWrapper, TickerData};
+
 pub enum MarketDataType {
     MarketBySybmol,
     TickerBySymbol,
@@ -27,25 +29,28 @@ impl NonKycClient {
         let response = get(url).await;
         match response {
             Ok(response) => {
-                let response_json = response.text().await.unwrap();
-                match data_type {
-                    MarketDataType::TickerBySymbol => {
-                        let ticker_object: Option<TickerData> =
-                            serde_json::from_str(&response_json).unwrap_or(None);
-                        match ticker_object {
-                            Some(ticker) => return Some(MarketWrapper::TickerData(ticker)),
-                            None => return None,
+                if response.status().is_success() {
+                    let response_json = response.text().await.unwrap();
+                    match data_type {
+                        MarketDataType::TickerBySymbol => {
+                            let ticker_object: Option<TickerData> =
+                                serde_json::from_str(&response_json).unwrap_or(None);
+                            match ticker_object {
+                                Some(ticker) => return Some(MarketWrapper::TickerData(ticker)),
+                                None => return None,
+                            }
                         }
-                    }
-                    MarketDataType::MarketBySybmol => {
-                        let market_object: Option<MarketData> =
-                            serde_json::from_str(&response_json).unwrap_or(None);
-                        match market_object {
-                            Some(market) => return Some(MarketWrapper::MarketData(market)),
-                            None => return None,
+                        MarketDataType::MarketBySybmol => {
+                            let market_object: Option<MarketData> =
+                                serde_json::from_str(&response_json).unwrap_or(None);
+                            match market_object {
+                                Some(market) => return Some(MarketWrapper::MarketData(market)),
+                                None => return None,
+                            }
                         }
                     }
                 }
+                return None;
             }
             Err(_) => return None,
         };

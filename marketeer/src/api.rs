@@ -1,2 +1,2 @@
-pub mod constants;
+pub mod coingecko;
 pub mod nonkyc;
