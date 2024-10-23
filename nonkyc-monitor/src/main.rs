@@ -18,19 +18,16 @@ use textwrap::wrap;
 const MINA: f64 = 5571.0;
 const ZEC: f64 = 17.5;
 
-// Wraps text but keeps the color formatting
 fn print_boxed_text(content: &str, width: usize) {
     let mut table = Table::new();
     table.set_format(*format::consts::FORMAT_BOX_CHARS);
-
-    // Wrap text without stripping ANSI, by taking into account word boundaries
     let wrapped_lines = wrap(content, width);
-
-    // Add the wrapped lines to the table
-    for line in wrapped_lines {
-        table.add_row(row![line]);
+    for (idx, line) in wrapped_lines.clone().into_iter().enumerate() {
+        if idx < wrapped_lines.len() - 1 {
+            let padded_line = format!("{:width$}", line, width = width);
+            table.add_row(row![padded_line]);
+        }
     }
-
     table.printstd();
 }
 
@@ -65,7 +62,7 @@ async fn main() {
                             asset_price * total_balance
                         }
                     };
-                    if usdt_value > 10f64 {
+                    if usdt_value > 50f64 {
                         message += &format!(
                             "[{}]: \n Price: {}$, Value: {}$\n",
                             balance.asset.red().bold(),
@@ -94,7 +91,7 @@ async fn main() {
             (ZEC * zec_price).to_string().green()
         );
         Command::new("clear").status().expect("Failed to clear cmd");
-        print_boxed_text(&message, 100);
+        print_boxed_text(&message, 120);
         sleep(Duration::from_millis(30000)).await;
     }
 }
