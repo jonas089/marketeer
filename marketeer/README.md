@@ -2,9 +2,6 @@
 Currently supported:
 
 - nonkyc
-
-Planning to support:
-
 - coingecko
 
 # Authentication
